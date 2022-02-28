@@ -1,125 +1,160 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import logo from './svelte-logo.svg';
+import logo from '../logo.png';
+import arrow from './arrow.png';
+import request from "../../utils/request";
+import {onMount} from "svelte";
+import {debounce} from 'lodash-es'
+
+let categories = [];
+let ulElement;
+let showLeftArrow = false;
+let showRightArrow = true;
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+onMount(async () => {
+  categories = await request('/api/category') as Category[];
+})
+
+const ulScroll = debounce(() => {
+  const {scrollLeft, offsetWidth, scrollWidth} = ulElement;
+  showLeftArrow = (scrollWidth > offsetWidth && scrollLeft > 0);
+  showRightArrow = (scrollWidth > offsetWidth && offsetWidth + scrollLeft < scrollWidth);
+}, 40)
+
+function scroll(direction) {
+  ulElement.scrollLeft += (100 * direction);
+}
 </script>
 
 <header>
-	<div class="corner">
-		<a href="/">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
+  <a href="/" class="logo">
+    <img src={logo} alt="SvelteKit"/>
+  </a>
 
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li class:active={$page.url.pathname === '/posts'}>
-				<a sveltekit:prefetch href="/">Posts</a>
-			</li>
-			<li class:active={$page.url.pathname === '/write'}>
-				<a sveltekit:prefetch href="/write">Write</a>
-			</li>
-			<li class:active={$page.url.pathname === '/todos'}>
-				<a sveltekit:prefetch href="/todos">Todos</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
+  <nav class="categories">
+    CATEGORY
+    {#if showRightArrow}
+      <div class="arrow-btn" on:click={() => scroll(1)}>
+        <img src="{arrow}" class="arrow" alt="right">
+      </div>
+    {/if}
+    <ul bind:this={ulElement} on:scroll={ulScroll} id="scroll-ui">
+      {#each categories as category}
+        <li class="category">{category.name}</li>
+      {/each}
+    </ul>
+    {#if showLeftArrow}
+      <div class="arrow-btn reverse" on:click={() => scroll(-1)}>
+        <img src="{arrow}" class="arrow" alt="left">
+      </div>
+    {/if}
+  </nav>
+
+  <span class="right-btn">WRITE</span>
 
 </header>
 
-<style>
-	header {
-		display: flex;
-		justify-content: space-between;
-		height: 80px;
-		background-color: white;
-	}
+<style lang="less">
+header {
+  padding: 0 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  background-color: white;
+  box-shadow: 0 -2px 10px rgb(0 0 0 / 15%);
 
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
+  .logo {
+    height: 50px;
+    width: 50px;
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
 
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
+    img {
+      width: 100%;
+      height: 100%;
+    }
 
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
+  }
 
-	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
+  .categories {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: rgba(117, 117, 117, 1);
+    position: relative;
 
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
+    .arrow-btn {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      padding: 6px 26px 6px 6px;
+      transform: rotate(180deg);
+      right: 10px;
+      background: linear-gradient(90deg,  rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
 
-	path {
-		fill: var(--background);
-	}
+      &.reverse {
+        left: 96px;
+        transform: rotate(0deg);
+      }
 
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
-	}
+      .arrow {
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+      }
+    }
 
-	li {
-		position: relative;
-		height: 100%;
-	}
+    ul {
+      min-width: 400px;
+      max-width: 560px;
+      display: flex;
+      flex-direction: row;
+      margin: 0 20px;
+      scroll-behavior: smooth;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      overflow: -moz-scrollbars-none;
 
-	li.active::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--accent-color);
-	}
+      &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
 
-	nav a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 1em;
-		color: var(--heading-color);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
-	}
+      li {
+        cursor: pointer;
+        flex-shrink: 0;
+        line-height: 20px;
+        border-radius: 100px;
+        background-color: rgba(242, 242, 242, 1);
+        transition: background 300ms ease 0s;
+        padding: 8px 16px;
+        margin: 0 4px;
+        list-style: none;
 
-	a:hover {
-		color: var(--accent-color);
-	}
+        &:hover {
+          background-color: rgb(230, 230, 230);
+          color: rgba(41, 41, 41, 1);
+        }
+      }
+    }
+  }
+
+  .right-btn {
+    color: #757575;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+      text-decoration: underline;
+    }
+  }
+}
+
+
 </style>
