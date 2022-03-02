@@ -4,3 +4,6 @@ export const category = writable({
   name: '',
   _id: ''
 })
+
+
+export const categories = writable([])

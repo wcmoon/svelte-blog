@@ -6,11 +6,14 @@ import request from "../../utils/request";
 import {onMount} from "svelte";
 import {debounce} from 'lodash-es'
 import {category} from '$lib/store'
+import Cookies from "js-cookie";
+import {categories as allCat} from "$lib/store";
 
 let categories = [];
 let ulElement;
 let showLeftArrow = false;
 let showRightArrow = true;
+let token = Cookies.get('token');
 
 interface Category {
   id: string;
@@ -19,6 +22,7 @@ interface Category {
 
 onMount(async () => {
   categories = await request('/api/category') as Category[];
+  $allCat = categories;
 })
 
 const ulScroll = debounce(() => {
@@ -32,7 +36,6 @@ function scroll(direction) {
 }
 
 function chooseCategory(cate) {
-  console.log(cate)
   $category = cate;
 }
 </script>
@@ -66,8 +69,11 @@ function chooseCategory(cate) {
   </nav>
 
 
-  <span class="right-btn">WRITE</span>
-
+  {#if token}
+    <span class="right-btn" on:click={() => {window.open('/write')}}>WRITE</span>
+  {:else}
+    <span class="right-btn" style="opacity: 0;cursor: default;" >empty</span>
+  {/if}
 </header>
 
 <style lang="less">
@@ -86,6 +92,7 @@ header {
     display: block;
     border-radius: 50%;
     overflow: hidden;
+    flex-shrink: 0;
 
     img {
       width: 100%;
@@ -132,6 +139,7 @@ header {
       overflow-x: auto;
       -ms-overflow-style: none;
       overflow: -moz-scrollbars-none;
+      scrollbar-width: none;
 
       &::-webkit-scrollbar {
         width: 0;
@@ -178,6 +186,7 @@ header {
       height: 38px;
       width: 270px;
       line-height: 38px;
+      outline: none;
     }
   }
   .right-btn {

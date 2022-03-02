@@ -12,6 +12,7 @@ switch (env) {
 interface Config extends RequestInit {
   params?: string;
   responseType?;
+  body?;
 }
 
 // 公用前缀 & 默认配置
@@ -21,7 +22,7 @@ let init = {
   params: null,
   body: null,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': baseURL,
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
     'Access-Control-Allow-Headers': 'Content-Type,Access-Token,Authorization,ybg'
@@ -43,7 +44,7 @@ const isPlainObject = function isPlainObject(obj) {
 };
 
 // 发送数据请求
-const request = function request(url, config: RequestInit = {}) {
+const request = function request(url, config: Config = {}) {
   // 合并配置项{不要去更改init中的内容}
   (config == null || typeof config !== "object") ? config = {} : null;//确保config肯定是对象
   if (config.headers && isPlainObject(config.headers)) {

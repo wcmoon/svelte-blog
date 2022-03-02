@@ -30,12 +30,20 @@
   },
   "type": "module",
   "dependencies": {
+    "@bytemd/plugin-gfm": "^1.11.0",
     "@fontsource/fira-mono": "^4.5.0",
     "@lukeed/uuid": "^2.0.0",
+    "@types/js-cookie": "^3.0.1",
+    "@types/lodash-es": "^4.17.6",
+    "@types/marked": "^4.0.2",
+    "bytemd": "^1.11.0",
     "cookie": "^0.4.1",
+    "js-cookie": "^3.0.1",
     "less": "^4.1.2",
     "lodash-es": "^4.17.21",
+    "marked": "^4.0.12",
     "qs": "^6.10.3",
-    "svelte-scrolling": "^1.1.1"
+    "svelte-scrolling": "^1.1.1",
+    "wangeditor": "^4.7.12"
   }
 }

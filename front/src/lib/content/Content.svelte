@@ -17,7 +17,7 @@ import label from './label.png';
     <li class="post">
       <span class="time"></span>
       <div class="preview">
-        <h2 class="title"></h2>
+        <h2 class="title">title</h2>
         <article class="preview"></article>
       </div>
       <div class="tips">
