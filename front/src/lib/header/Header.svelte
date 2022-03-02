@@ -1,9 +1,11 @@
 <script lang="ts">
 import logo from '../logo.png';
 import arrow from './arrow.png';
+import picSearch from './search.png';
 import request from "../../utils/request";
 import {onMount} from "svelte";
 import {debounce} from 'lodash-es'
+import {category} from '$lib/store'
 
 let categories = [];
 let ulElement;
@@ -28,6 +30,11 @@ const ulScroll = debounce(() => {
 function scroll(direction) {
   ulElement.scrollLeft += (100 * direction);
 }
+
+function chooseCategory(cate) {
+  console.log(cate)
+  $category = cate;
+}
 </script>
 
 <header>
@@ -44,7 +51,7 @@ function scroll(direction) {
     {/if}
     <ul bind:this={ulElement} on:scroll={ulScroll} id="scroll-ui">
       {#each categories as category}
-        <li class="category">{category.name}</li>
+        <li class="category" on:click={() => chooseCategory(category)}>{category.name}</li>
       {/each}
     </ul>
     {#if showLeftArrow}
@@ -52,7 +59,12 @@ function scroll(direction) {
         <img src="{arrow}" class="arrow" alt="left">
       </div>
     {/if}
+    <div class="search-container">
+      <img src="{picSearch}" alt="search" class="search-pic">
+      <input type="text" placeholder="search">
+    </div>
   </nav>
+
 
   <span class="right-btn">WRITE</span>
 
@@ -95,7 +107,7 @@ header {
       height: 24px;
       padding: 6px 26px 6px 6px;
       transform: rotate(180deg);
-      right: 10px;
+      right: 370px;
       background: linear-gradient(90deg,  rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
 
       &.reverse {
@@ -145,6 +157,29 @@ header {
     }
   }
 
+  .search-container {
+    margin-left: 30px;
+    width: 330px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(230, 230, 230, 1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .search-pic {
+      width: 26px;
+      height: 26px;
+      padding: 7px;
+    }
+
+    input {
+      border: none;
+      height: 38px;
+      width: 270px;
+      line-height: 38px;
+    }
+  }
   .right-btn {
     color: #757575;
     cursor: pointer;

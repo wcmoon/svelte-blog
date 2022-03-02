@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+import Content from '$lib/content/Content.svelte';
 </script>
 
 <svelte:head>
@@ -10,9 +11,13 @@
 </svelte:head>
 
 <section>
-	this is the self-introduction page
+	<Content class="content"/>
 </section>
 
-<style>
+<style lang="less">
+section {
+	display: flex;
+	justify-content: center;
+}
 
 </style>
