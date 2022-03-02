@@ -125,6 +125,10 @@ onMount(() => {
       border: 1px solid white;
       cursor: pointer;
       color: white;
+
+      &:hover {
+        background-color: rgba(85, 172, 238, 1);
+      }
     }
 
     ul {

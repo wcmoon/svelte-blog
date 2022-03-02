@@ -1,27 +1,44 @@
 <script lang="ts">
 import {marked} from 'marked';
 import MultiSelect from "$lib/mult-select/MultiSelect.svelte";
+import request from "../utils/request";
+import Cookies from "js-cookie";
 let source = '';
 let title = '';
-let markdown;
+let description;
 $: {
-  markdown = marked.parse(source);
+  description = marked.parse(source);
 }
 let categories = [2,3,4,5,6,6]
 let selected = [];
+
+async function publish() {
+  let res = await request('/api/post', {
+    method: 'post',
+    body: {
+      title,
+      description,
+      username: 'wcmoon',
+      categories,
+    }
+  });
+  if (!res) return;
+  location.href = '/';
+}
 
 </script>
 <section>
   <input bind:value={title} type="text" class="title" placeholder="Input Title"/>
   <MultiSelect bind:categories={categories} bind:selected={selected} />
+  <input type="text" placeholder="Input photo url: 'http://<path>'" class="photo-url">
   <div class="article">
-    <input type="button" value="Publish" class="publish-btn">
+    <input on:click={publish} type="button" value="Publish" class="publish-btn">
     <textarea
       bind:value={source}
       class="source article-part"
       placeholder="Input article by markdown"
     ></textarea>
-    <div class="output article-part">{@html markdown}</div>
+    <div class="output article-part">{@html description}</div>
   </div>
 </section>
 
@@ -39,6 +56,13 @@ section {
     border: none;
     outline: none;
     margin-bottom: 20px;
+  }
+
+  .photo-url {
+    margin-top: 20px;
+    width: 500px;
+    border: none;
+    border-bottom: 1px solid rgb(117, 117, 117);
   }
 
   .article {

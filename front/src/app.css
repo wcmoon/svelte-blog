@@ -64,6 +64,7 @@ input,
 button {
 	font-size: inherit;
 	font-family: inherit;
+	outline: none;
 }
 
 button:focus:not(:focus-visible) {

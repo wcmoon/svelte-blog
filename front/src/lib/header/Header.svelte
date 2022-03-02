@@ -70,7 +70,7 @@ function chooseCategory(cate) {
 
 
   {#if token}
-    <span class="right-btn" on:click={() => {window.open('/write')}}>WRITE</span>
+    <span class="right-btn" on:click={() => {location.href = '/write';}}>WRITE</span>
   {:else}
     <span class="right-btn" style="opacity: 0;cursor: default;" >empty</span>
   {/if}

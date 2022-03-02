@@ -1,4 +1,5 @@
 import Qs from 'qs';
+import Cookies from "js-cookie";
 //对Fetch的封装：让其支持params/请求主体的格式化/请求地址的公共前缀
 
 /* const env = process.env.NODE_ENV || 'development',
@@ -25,7 +26,8 @@ let init = {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': baseURL,
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
-    'Access-Control-Allow-Headers': 'Content-Type,Access-Token,Authorization,ybg'
+    'Access-Control-Allow-Headers': 'Content-Type,Access-Token,Authorization,ybg',
+    authorization: `Bearer ${Cookies.get('token')}`
   },
   mode: 'cors',
   // credentials: true,
