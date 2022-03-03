@@ -6,14 +6,12 @@ import request from "../../utils/request";
 import {onMount} from "svelte";
 import {debounce} from 'lodash-es'
 import {category} from '$lib/store'
-import Cookies from "js-cookie";
-import {categories as allCat} from "$lib/store";
+import {categories as allCat, isLogin} from "$lib/store";
 
 let categories = [];
 let ulElement;
 let showLeftArrow = false;
 let showRightArrow = true;
-let token = Cookies.get('token');
 
 interface Category {
   id: string;
@@ -69,7 +67,7 @@ function chooseCategory(cate) {
   </nav>
 
 
-  {#if token}
+  {#if isLogin}
     <span class="right-btn" on:click={() => {location.href = '/write';}}>WRITE</span>
   {:else}
     <span class="right-btn" style="opacity: 0;cursor: default;" >empty</span>

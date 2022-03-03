@@ -11,7 +11,7 @@ switch (env) {
 } */
 
 interface Config extends RequestInit {
-  params?: string;
+  params?;
   responseType?;
   body?;
 }

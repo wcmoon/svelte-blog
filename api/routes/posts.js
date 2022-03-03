@@ -1,45 +1,25 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
-const {authenticateToken} = require("../utils/token");
-
-// create
-router.post('/', authenticateToken, async (req, res) => {
-  const newPost = new Post(req.body);
-  try {
-    const savePost = await newPost.save();
-    res.status(200).json(savePost);
-  } catch(err) {
-    res.status(500).json(err);
-  }
-})
-
-// update
-router.put('/', authenticateToken, async (req, res) => {
-  try {
-    const post = await Post.findById(req.body.id);
-    try {
-      const updatedPost = await Post.findByIdAndUpdate(req.body.id, {
-        $set: req.body
-      }, {new: true})
-      res.status(200).json(updatedPost);
-    } catch(err) {
-      res.status(500).json(err);
-    }
-  } catch (err) {
-    res.status(400).json('no such post')
-  }
-})
-
 
 // get
 router.get('/', async (req, res) => {
- try {
-   console.log(req.params.id);
-    const post = await Post.findById(req.query.id);
-    res.status(200).json(post);
- } catch (err) {
-   res.status(500).json(err);
- }
+  try {
+    const data = req.query;
+    let posts;
+    if (data?.categories) {
+      console.log(data)
+      posts = await Post.find({
+        categories: {
+          $in: [data.categories]
+        }
+      })
+    } else {
+      posts = await Post.find();
+    }
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 })
 
 

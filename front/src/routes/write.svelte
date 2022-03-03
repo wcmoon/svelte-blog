@@ -2,14 +2,15 @@
 import {marked} from 'marked';
 import MultiSelect from "$lib/mult-select/MultiSelect.svelte";
 import request from "../utils/request";
-import Cookies from "js-cookie";
+import {categories} from "$lib/store";
+
 let source = '';
 let title = '';
 let description;
+let photo = '';
 $: {
   description = marked.parse(source);
 }
-let categories = [2,3,4,5,6,6]
 let selected = [];
 
 async function publish() {
@@ -19,7 +20,10 @@ async function publish() {
       title,
       description,
       username: 'wcmoon',
-      categories,
+      categories: selected.map(item => {
+        return item.name;
+      }),
+      photo
     }
   });
   if (!res) return;
@@ -29,8 +33,8 @@ async function publish() {
 </script>
 <section>
   <input bind:value={title} type="text" class="title" placeholder="Input Title"/>
-  <MultiSelect bind:categories={categories} bind:selected={selected} />
-  <input type="text" placeholder="Input photo url: 'http://<path>'" class="photo-url">
+  <MultiSelect bind:categories={$categories} bind:selected={selected} />
+  <input bind:value={photo} type="text" placeholder="Input photo url: 'http://<path>'" class="photo-url">
   <div class="article">
     <input on:click={publish} type="button" value="Publish" class="publish-btn">
     <textarea
