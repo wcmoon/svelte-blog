@@ -2,13 +2,15 @@ import Qs from 'qs';
 import Cookies from "js-cookie";
 //对Fetch的封装：让其支持params/请求主体的格式化/请求地址的公共前缀
 
-/* const env = process.env.NODE_ENV || 'development',
-    baseURL = '';
+let baseURL:string = '';
+const env = process.env.NODE_ENV || 'development';
 switch (env) {
-    case 'development':
-        baseURL = 'http://127.0.0.1:9999';
-        break;
-} */
+  case 'development':
+    baseURL = 'http://127.0.0.1:5100';
+    break;
+  default:
+    baseURL = 'http://1.15.151.100:5100';
+}
 
 interface Config extends RequestInit {
   params?;
@@ -17,7 +19,7 @@ interface Config extends RequestInit {
 }
 
 // 公用前缀 & 默认配置
-let baseURL = 'http://127.0.0.1:5100';
+// baseURL = 'http://127.0.0.1:5100';
 let init = {
   method: 'GET',
   params: null,
