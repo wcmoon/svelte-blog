@@ -17,4 +17,4 @@ if (browser) {
 export const categories = writable([])
 
 
-export const isLogin = readable(Cookies.get('token'));
+export const isLogin = readable(Cookies.get('token') !== '');

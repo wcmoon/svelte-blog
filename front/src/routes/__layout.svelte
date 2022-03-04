@@ -1,6 +1,17 @@
 <script lang="ts">
 	import Header from '$lib/header/Header.svelte';
 	import '../app.css';
+	import {onMount} from "svelte";
+	import request from "../utils/request";
+
+	onMount(async () => {
+		request('/api/auth/check', {
+			method: 'post'
+		}).then(res => {
+			console.log(res);
+		})
+	})
+
 </script>
 
 <Header />

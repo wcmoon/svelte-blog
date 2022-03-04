@@ -55,7 +55,7 @@ $:{
             {/each}
           </ul>
           <span class="cost-time"></span>
-          {#if isLogin}
+          {#if $isLogin}
             <div class="tools">
               <span class="tool">Edit</span>
               <span class="tool">Delete</span>

@@ -22,6 +22,7 @@ interface Category {
 onMount(async () => {
   categories = await request('/api/category') as Category[];
   $allCat = categories;
+  console.log($isLogin)
 })
 
 const ulScroll = debounce(() => {
@@ -71,7 +72,7 @@ function chooseCategory(cate) {
   </nav>
 
 
-  {#if isLogin}
+  {#if $isLogin}
     <span class="right-btn" on:click={() => {location.href = '/write';}}>WRITE</span>
   {:else}
     <span class="right-btn" style="opacity: 0;cursor: default;" >empty</span>

@@ -74,7 +74,6 @@ const request = function request(url, config: Config = {}) {
     }
     url = `${url}${url.includes('?') ? '&' : '?'}${params} `;//拼接
   }
-  console.log(url);
 
   // 处理请求主体的数据格式{根据headers中的Content-Type处理成为指定的格式}
   if (body != null) {
@@ -136,6 +135,16 @@ const request = function request(url, config: Config = {}) {
     if (reason && reason.code === "STATUS ERROR") {
       switch (reason.status) {
         case 401:
+          if (location.pathname !== '/') {
+            location.href = '/';
+          }
+          Cookies.set('token', '');
+          break;
+        case 403:
+          if (location.pathname !== '/') {
+            location.href = '/';
+          }
+          Cookies.set('token', '');
           break;
       }
     }

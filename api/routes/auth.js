@@ -1,7 +1,12 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const {generateAccessToken} = require("../utils/token");
+const {generateAccessToken, authenticateToken} = require("../utils/token");
+
+// checkLogin
+router.post('/check', authenticateToken, async (req, res) => {
+  res.status(200).json({login: true})
+});
 
 // register
 router.post('/register', async (req, res) => {
