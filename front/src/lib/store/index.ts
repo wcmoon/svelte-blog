@@ -1,10 +1,18 @@
 import {readable, writable} from "svelte/store";
 import Cookies from "js-cookie";
+import { browser } from "$app/env";
 
-export const category = writable({
+let initCategory = {
   name: '',
-  _id: ''
-})
+  id: ''
+};
+if (browser) {
+  initCategory = JSON.parse(localStorage.getItem('category')) || initCategory;
+}
+export const category = writable(initCategory)
+if (browser) {
+  category.subscribe(val => localStorage.setItem("category", JSON.stringify(val)));
+}
 
 export const categories = writable([])
 

@@ -44,7 +44,7 @@ $:{
         <span class="time">{
           new Date(post.updatedAt).toLocaleString()
         }</span>
-        <div class="preview">
+        <div class="preview" on:click={() => {location.href=`/post/${post.title}`}}>
           <h2 class="title">{post.title}</h2>
           <article class="post-content">{@html post.description}</article>
         </div>

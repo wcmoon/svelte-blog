@@ -7,6 +7,7 @@ import {onMount} from "svelte";
 import {debounce} from 'lodash-es'
 import {category} from '$lib/store'
 import {categories as allCat, isLogin} from "$lib/store";
+import {page} from '$app/stores'
 
 let categories = [];
 let ulElement;
@@ -34,12 +35,15 @@ function scroll(direction) {
 }
 
 function chooseCategory(cate) {
-  $category = cate;
+  $category = cate ? cate : {name:'', id: ''};
+  if ($page.url.pathname !== '/') {
+    location.href = '/';
+  }
 }
 </script>
 
 <header>
-  <a href="/" class="logo">
+  <a href="/" class="logo" on:click={() => {chooseCategory(null)}}>
     <img src={logo} alt="SvelteKit"/>
   </a>
 
