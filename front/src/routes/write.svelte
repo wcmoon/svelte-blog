@@ -98,7 +98,7 @@ section {
     .article-part {
       border: 1px solid rgb(117, 117, 117);
       border-radius: 10px;
-      height: calc(100vh - 300px);
+      height: calc(100vh - 350px);
       min-width: 400px;
       flex: 1;
       resize: none;
