@@ -7,7 +7,6 @@ router.get('/', async (req, res) => {
     const data = req.query;
     let posts;
     if (data?.categories) {
-      console.log(data)
       posts = await Post.find({
         categories: {
           $in: [data.categories]
