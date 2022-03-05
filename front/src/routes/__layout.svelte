@@ -3,13 +3,16 @@
 	import '../app.css';
 	import {onMount} from "svelte";
 	import request from "../utils/request";
+	import Cookies from "js-cookie";
 
 	onMount(async () => {
-		request('/api/auth/check', {
-			method: 'post'
-		}).then(res => {
-			console.log(res);
-		})
+		if (Cookies.get('token') !== '') {
+			request('/api/auth/check', {
+				method: 'post'
+			}).then(res => {
+				console.log(res);
+			})
+		}
 	})
 
 </script>

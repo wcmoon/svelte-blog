@@ -135,15 +135,11 @@ const request = function request(url, config: Config = {}) {
     if (reason && reason.code === "STATUS ERROR") {
       switch (reason.status) {
         case 401:
-          if (location.pathname !== '/') {
-            location.href = '/';
-          }
+          location.href = '/';
           Cookies.set('token', '');
           break;
         case 403:
-          if (location.pathname !== '/') {
-            location.href = '/';
-          }
+          location.href = '/';
           Cookies.set('token', '');
           break;
       }
