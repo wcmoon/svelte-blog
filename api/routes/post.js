@@ -43,6 +43,15 @@ router.get('/', async (req, res) => {
 
 
 // delete
+router.delete('/', async (req, res) => {
+  try {
+    console.log(req.body);
+    const post = await Post.findOneAndDelete({title: req.body.title});
+    res.status(200).json(post)
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
 
 

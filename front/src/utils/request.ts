@@ -97,7 +97,7 @@ const request = function request(url, config: Config = {}) {
     cache,
     headers
   };
-  /^(POST|PUT|PATCH)$/i.test(method) ? config.body = body : null;
+  /^(POST|PUT|PATCH|DELETE)$/i.test(method) ? config.body = body : null;
   return fetch(url, config).then(function onfulfilled(response) {
     // 走到这边不一定是成功的：
     // Fetch的特点的是，只要服务器有返回结果，不论状态码是多少，它都认为是成功

@@ -4,21 +4,38 @@ import {onMount} from "svelte";
 import request from "../../utils/request";
 
 let posts = [];
+let handlePost = {title: ''};
+let dialogElement;
 let sortType = 0; // 0: trending 1: latest
 onMount(async () => {
-  posts = await request('/api/posts') as [];
+  await getPosts();
 })
-
-$:{
+async function getPosts() {
   let params = {
     categories: $category.name,
     sort: sortType
   }
-  request('/api/posts', {
+  posts = await request('/api/posts', {
     params
-  }).then(res => {
-    posts = res as [];
+  }) as [];
+}
+function showDeleteConfirm(post) {
+  handlePost = post;
+  dialogElement.showModal();
+}
+async function deletePost() {
+  const res = await request('/api/post', {
+    method: 'delete',
+    body: {
+      title: handlePost.title
+    }
   })
+  if (!res) return;
+  dialogElement.close();
+  await getPosts();
+}
+$:{
+  $category.name & getPosts();
 }
 
 </script>
@@ -58,7 +75,7 @@ $:{
           {#if $isLogin}
             <div class="tools">
               <span class="tool">Edit</span>
-              <span class="tool">Delete</span>
+              <span class="tool" on:click={() => showDeleteConfirm(post)}>Delete</span>
             </div>
           {/if}
         </div>
@@ -68,6 +85,13 @@ $:{
     {/each}
 
   </ul>
+  <dialog bind:this={dialogElement}>
+    Sure to delete <span class="post-title">{handlePost.title}</span> ?
+    <div class="btns">
+      <input type="button" value="Yes" on:click={deletePost}>
+      <input type="button" value="Cancle" on:click={() => dialogElement.close()}>
+    </div>
+  </dialog>
 </section>
 
 <style lang="less">
@@ -200,6 +224,38 @@ $:{
           right: 0;
           top: 70px;
         }
+      }
+    }
+  }
+}
+dialog {
+  box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+  border: none;
+  border-radius: 10px;
+  padding: 30px;
+  font-size: 22px;
+  .post-title {
+    font-weight: 600;
+    color: #55acee;
+    text-transform: capitalize;
+  }
+  .btns {
+    font-size: 14px;
+    margin-top: 30px;
+    justify-content: flex-end;
+    display: flex;
+    input[type=button] {
+      height: 24px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: none;
+      margin-left: 10px;
+      color: white;
+      cursor: pointer;
+      background-color: rgba(85, 172, 238, 0.8);
+
+      &:hover {
+        background-color: rgba(85, 172, 238, 1);
       }
     }
   }
