@@ -3,7 +3,8 @@ import {marked} from 'marked';
 import MultiSelect from "$lib/mult-select/MultiSelect.svelte";
 import request from "../../utils/request";
 import {categories} from "$lib/store";
-import {htmlEncode} from "js-htmlencode";
+import pkg from 'js-htmlencode';
+const { htmlEncode } = pkg;
 
 let source = '';
 let title = '';
