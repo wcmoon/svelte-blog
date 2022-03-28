@@ -1,15 +1,17 @@
 <script lang="ts">
 import {marked} from 'marked';
 import MultiSelect from "$lib/mult-select/MultiSelect.svelte";
-import request from "../utils/request";
+import request from "../../utils/request";
 import {categories} from "$lib/store";
+import {htmlEncode} from "js-htmlencode";
 
 let source = '';
 let title = '';
 let description;
+let content = '';
 let photo = '';
 $: {
-  description = marked.parse(source);
+  content = marked.parse(htmlEncode(source));
 }
 let selected = [];
 
@@ -19,6 +21,8 @@ async function publish() {
     body: {
       title,
       description,
+      source,
+      content,
       username: 'wcmoon',
       categories: selected.map(item => {
         return item.name;
@@ -35,6 +39,11 @@ async function publish() {
   <input bind:value={title} type="text" class="title" placeholder="Input Title"/>
   <MultiSelect bind:categories={$categories} bind:selected={selected} />
   <input bind:value={photo} type="text" placeholder="Input photo url: 'http://<path>'" class="photo-url">
+  <textarea
+    bind:value={description}
+    class="description"
+    placeholder="Input description"
+  ></textarea>
   <div class="article">
     <input on:click={publish} type="button" value="Publish" class="publish-btn">
     <textarea
@@ -42,7 +51,7 @@ async function publish() {
       class="source article-part"
       placeholder="Input article by markdown"
     ></textarea>
-    <div class="output article-part">{@html description}</div>
+    <div class="output article-part">{@html content}</div>
   </div>
 </section>
 
@@ -67,6 +76,16 @@ section {
     width: 500px;
     border: none;
     border-bottom: 1px solid rgb(117, 117, 117);
+  }
+
+  .description {
+    resize: none;
+    width: 480px;
+    padding: 16px;
+    height: 62px;
+    margin-top: 20px;
+    outline-color: rgb(85, 172, 238);
+    border-radius: 10px;
   }
 
   .article {
@@ -98,7 +117,7 @@ section {
     .article-part {
       border: 1px solid rgb(117, 117, 117);
       border-radius: 10px;
-      height: calc(100vh - 350px);
+      height: calc(100vh - 432px);
       min-width: 400px;
       flex: 1;
       resize: none;

@@ -26,7 +26,7 @@ import {isLogin} from "$lib/store";
   <img
     src="https://svelte-blog-1253393686.cos.ap-shanghai.myqcloud.com/71292531_2407325295982945_4982031951620734976_n.jpeg"
     alt="banner">
-  <article class="">{@html article.description}</article>
+  <article class="">{@html article.content}</article>
   <div class="footer">
     <ul class="categories">
       {#each article.categories as category}

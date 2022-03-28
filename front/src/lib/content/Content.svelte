@@ -63,7 +63,7 @@ $:{
         }</span>
         <div class="preview" on:click={() => {location.href=`/post/${post.title}`}}>
           <h2 class="title">{post.title}</h2>
-          <article class="post-content">{@html post.description}</article>
+          <article class="post-content">{post.description}</article>
         </div>
         <div class="tips">
           <ul class="categories">
@@ -74,7 +74,7 @@ $:{
           <span class="cost-time"></span>
           {#if $isLogin}
             <div class="tools">
-              <span class="tool">Edit</span>
+              <span class="tool" on:click={location.href = `/write/${post.title}`}>Edit</span>
               <span class="tool" on:click={() => showDeleteConfirm(post)}>Delete</span>
             </div>
           {/if}
